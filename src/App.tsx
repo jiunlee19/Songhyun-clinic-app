@@ -279,12 +279,22 @@ export default function App() {
                             찾아오시는 길
                         </h3>
                         <div className="flex gap-2 mb-3">
-                            <button className="px-3 py-1.5 bg-white rounded-full text-xs font-medium border border-gray-200 shadow-sm flex items-center gap-1">
+                            <a
+                                href="https://map.naver.com/p/entry/place/13258558?c=15.00,0,0,0,dh&placePath=/home?from=map&fromPanelNum=1&additionalHeight=76&timestamp=202604141523&locale=ko&svcName=map_pcv5"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-3 py-1.5 bg-white rounded-full text-xs font-medium border border-gray-200 shadow-sm flex items-center gap-1 hover:bg-gray-50 transition-colors"
+                            >
                                 네이버 지도 <ExternalLink size={12} />
-                            </button>
-                            <button className="px-3 py-1.5 bg-white rounded-full text-xs font-medium border border-gray-200 shadow-sm flex items-center gap-1">
+                            </a>
+                            <a
+                                href="https://kko.to/tmEJtK8g_y"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-3 py-1.5 bg-white rounded-full text-xs font-medium border border-gray-200 shadow-sm flex items-center gap-1 hover:bg-gray-50 transition-colors"
+                            >
                                 카카오맵 <ExternalLink size={12} />
-                            </button>
+                            </a>
                         </div>
                     </div>
 
