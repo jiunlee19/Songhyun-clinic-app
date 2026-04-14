@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
     Activity,
@@ -20,55 +20,62 @@ import {
 } from "lucide-react";
 
 const SECTIONS = [
-    { id: "treatment", label: "진료과목" },
-    { id: "location", label: "병원위치" },
-    { id: "hours", label: "운영시간" },
     { id: "intro", label: "원장 소개" },
+    { id: "treatment", label: "진료과목" },
+    { id: "hours", label: "운영시간" },
+    { id: "location", label: "병원위치" },
+    { id: "reservation", label: "상담예약" },
 ];
 
 export default function App() {
-    const [activeSection, setActiveSection] = useState("");
+    const [activeSection, setActiveSection] = useState(SECTIONS[0].id);
     const [isScrolled, setIsScrolled] = useState(false);
 
+    // 스크롤 상태 감지 + 최상단일 때 첫 번째 섹션 활성화
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 50);
 
-            const scrollPosition = window.scrollY + 100;
-            for (const section of SECTIONS) {
-                const element = document.getElementById(section.id);
-                if (element) {
-                    const { offsetTop, offsetHeight } = element;
-                    if (
-                        scrollPosition >= offsetTop &&
-                        scrollPosition < offsetTop + offsetHeight
-                    ) {
-                        setActiveSection(section.id);
-                        break;
-                    }
-                }
+            // 페이지 최상단이면 첫 번째 섹션 활성화
+            if (window.scrollY < 100) {
+                setActiveSection(SECTIONS[0].id);
             }
         };
-
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const scrollToSection = (id: string) => {
-        const element = document.getElementById(id);
-        if (element) {
-            const offset = 80;
-            const bodyRect = document.body.getBoundingClientRect().top;
-            const elementRect = element.getBoundingClientRect().top;
-            const elementPosition = elementRect - bodyRect;
-            const offsetPosition = elementPosition - offset;
+    // IntersectionObserver로 현재 보이는 섹션 감지
+    useEffect(() => {
+        const observers: IntersectionObserver[] = [];
 
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: "smooth",
-            });
-        }
-    };
+        SECTIONS.forEach((section) => {
+            const element = document.getElementById(section.id);
+            if (element) {
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            // 최상단일 때는 스크롤 핸들러가 처리하므로 무시
+                            if (window.scrollY < 100) return;
+
+                            if (entry.isIntersecting) {
+                                setActiveSection(section.id);
+                            }
+                        });
+                    },
+                    {
+                        rootMargin: "-20% 0px -20% 0px", // 화면 중앙 40% 영역에 있을 때 감지
+                    }
+                );
+                observer.observe(element);
+                observers.push(observer);
+            }
+        });
+
+        return () => {
+            observers.forEach((observer) => observer.disconnect());
+        };
+    }, []);
 
     return (
         <div className="min-h-screen flex flex-col">
@@ -87,10 +94,10 @@ export default function App() {
             >
                 <div className="flex justify-around border-b border-gray-100">
                     {SECTIONS.map((section) => (
-                        <button
+                        <a
                             key={section.id}
-                            onClick={() => scrollToSection(section.id)}
-                            className={`flex-1 py-4 text-[15px] font-medium transition-colors relative ${
+                            href={`#${section.id}`}
+                            className={`flex-1 py-4 text-[15px] font-medium transition-colors relative text-center ${
                                 activeSection === section.id
                                     ? "text-brand-green"
                                     : "text-gray-400"
@@ -103,7 +110,7 @@ export default function App() {
                                     className="absolute bottom-0 left-0 right-0 h-1 bg-brand-green"
                                 />
                             )}
-                        </button>
+                        </a>
                     ))}
                 </div>
             </nav>
@@ -119,30 +126,65 @@ export default function App() {
                     />
                 </section>
 
-                {/* Location Section */}
+                {/* Treatment Subjects Section */}
                 <section
-                    id="location"
+                    id="treatment"
                     className="section-margin py-16 bg-brand-bg"
                 >
-                    <div className="flex flex-wrap justify-between items-end mb-3 gap-3">
-                        <h3 className="font-serif text-2xl font-bold">
-                            찾아오시는 길
-                        </h3>
-                        <div className="flex gap-2 mb-3">
-                            <button className="px-3 py-1.5 bg-white rounded-full text-xs font-medium border border-gray-200 shadow-sm flex items-center gap-1">
-                                네이버 지도 <ExternalLink size={12} />
-                            </button>
-                            <button className="px-3 py-1.5 bg-white rounded-full text-xs font-medium border border-gray-200 shadow-sm flex items-center gap-1">
-                                카카오맵 <ExternalLink size={12} />
-                            </button>
-                        </div>
-                    </div>
+                    <h3 className="font-serif text-2xl font-bold mb-8">
+                        주요 진료과목
+                    </h3>
 
-                    <div className="space-y-2">
-                        <p className="text-xl font-bold">옥동 경북대로 432</p>
-                        <p className="text-brand-muted leading-relaxed">
-                            권내과 맞은편 수외과 건물 1층입니다.
-                        </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {[
+                            {
+                                icon: Activity,
+                                title: "통증 클리닉",
+                                desc: "만성적인 통증부터 급성 염좌까지, 근본적인 원인을 찾아 치료합니다.",
+                            },
+                            {
+                                icon: HeartPulse,
+                                title: "교통사고 후유증",
+                                desc: "사고 직후에는 나타나지 않는 미세한 손상과 어혈을 제거합니다.",
+                            },
+                            {
+                                icon: Flower2,
+                                title: "여성 질환",
+                                desc: "여성의 생애 주기에 맞춘 따뜻하고 세심한 진료를 제공합니다.",
+                            },
+                            {
+                                icon: Baby,
+                                title: "소아 성장",
+                                desc: "아이들의 올바른 성장과 면역력 강화를 위한 기초를 다집니다.",
+                            },
+                            {
+                                icon: Stethoscope,
+                                title: "보약 / 공진단",
+                                desc: "기력이 쇠한 분들을 위한 정성 어린 맞춤 보약을 조제합니다.",
+                            },
+                        ].map((item, idx) => (
+                            <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: idx * 0.1 }}
+                                whileHover={{ y: -4 }}
+                                className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-4 group"
+                            >
+                                <div className="w-12 h-12 rounded-xl bg-brand-bg flex items-center justify-center text-brand-green group-hover:bg-brand-green group-hover:text-white transition-colors">
+                                    <item.icon size={24} />
+                                </div>
+                                <div>
+                                    <h4 className="font-bold text-lg mb-2">
+                                        {item.title}
+                                    </h4>
+                                    <p className="text-sm text-brand-muted leading-relaxed">
+                                        {item.desc}
+                                    </p>
+                                </div>
+                            </motion.div>
+                        ))}
                     </div>
                 </section>
 
@@ -227,70 +269,38 @@ export default function App() {
                     </div>
                 </section>
 
-                {/* Treatment Subjects Section */}
+                {/* Location Section */}
                 <section
-                    id="treatment"
+                    id="location"
                     className="section-margin py-16 bg-brand-bg"
                 >
-                    <h3 className="font-serif text-2xl font-bold mb-8">
-                        주요 진료과목
-                    </h3>
+                    <div className="flex flex-wrap justify-between items-end mb-3 gap-3">
+                        <h3 className="font-serif text-2xl font-bold">
+                            찾아오시는 길
+                        </h3>
+                        <div className="flex gap-2 mb-3">
+                            <button className="px-3 py-1.5 bg-white rounded-full text-xs font-medium border border-gray-200 shadow-sm flex items-center gap-1">
+                                네이버 지도 <ExternalLink size={12} />
+                            </button>
+                            <button className="px-3 py-1.5 bg-white rounded-full text-xs font-medium border border-gray-200 shadow-sm flex items-center gap-1">
+                                카카오맵 <ExternalLink size={12} />
+                            </button>
+                        </div>
+                    </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {[
-                            {
-                                icon: Activity,
-                                title: "통증 클리닉",
-                                desc: "만성적인 통증부터 급성 염좌까지, 근본적인 원인을 찾아 치료합니다.",
-                            },
-                            {
-                                icon: HeartPulse,
-                                title: "교통사고 후유증",
-                                desc: "사고 직후에는 나타나지 않는 미세한 손상과 어혈을 제거합니다.",
-                            },
-                            {
-                                icon: Flower2,
-                                title: "여성 질환",
-                                desc: "여성의 생애 주기에 맞춘 따뜻하고 세심한 진료를 제공합니다.",
-                            },
-                            {
-                                icon: Baby,
-                                title: "소아 성장",
-                                desc: "아이들의 올바른 성장과 면역력 강화를 위한 기초를 다집니다.",
-                            },
-                            {
-                                icon: Stethoscope,
-                                title: "보약 / 공진단",
-                                desc: "기력이 쇠한 분들을 위한 정성 어린 맞춤 보약을 조제합니다.",
-                            },
-                        ].map((item, idx) => (
-                            <motion.div
-                                key={idx}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: idx * 0.1 }}
-                                whileHover={{ y: -4 }}
-                                className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-4 group"
-                            >
-                                <div className="w-12 h-12 rounded-xl bg-brand-bg flex items-center justify-center text-brand-green group-hover:bg-brand-green group-hover:text-white transition-colors">
-                                    <item.icon size={24} />
-                                </div>
-                                <div>
-                                    <h4 className="font-bold text-lg mb-2">
-                                        {item.title}
-                                    </h4>
-                                    <p className="text-sm text-brand-muted leading-relaxed">
-                                        {item.desc}
-                                    </p>
-                                </div>
-                            </motion.div>
-                        ))}
+                    <div className="space-y-2">
+                        <p className="text-xl font-bold">옥동 경북대로 432</p>
+                        <p className="text-brand-muted leading-relaxed">
+                            권내과 맞은편 수외과 건물 1층입니다.
+                        </p>
                     </div>
                 </section>
 
                 {/* CTA Section */}
-                <section className="section-margin py-12">
+                <section
+                    id="reservation"
+                    className="section-margin py-12 bg-white"
+                >
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}

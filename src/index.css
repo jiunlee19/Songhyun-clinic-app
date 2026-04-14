@@ -16,6 +16,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* sticky nav 높이 보정 */
   }
   body {
     @apply bg-brand-bg text-brand-text font-sans antialiased;
