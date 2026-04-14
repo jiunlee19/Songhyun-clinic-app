@@ -343,7 +343,7 @@ export default function App() {
 
                     <div className="space-y-2 text-sm text-gray-400">
                         <p>대표: 이상윤</p>
-                        <p>전화: 054-858-0877</p>
+                        <p>전화: 054-858-7067</p>
                         <p>주소: 경상북도 안동시 옥동 경북대로 432</p>
                     </div>
 
