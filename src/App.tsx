@@ -124,18 +124,19 @@ export default function App() {
                     id="location"
                     className="section-margin py-16 bg-brand-bg"
                 >
-                    <div className="flex justify-between items-end mb-6">
+                    <div className="flex justify-between items-end mb-3">
                         <h3 className="font-serif text-2xl font-bold">
                             찾아오시는 길
                         </h3>
-                        <div className="flex gap-2">
-                            <button className="px-3 py-1.5 bg-white rounded-full text-xs font-medium border border-gray-200 shadow-sm flex items-center gap-1">
-                                네이버 지도 <ExternalLink size={12} />
-                            </button>
-                            <button className="px-3 py-1.5 bg-white rounded-full text-xs font-medium border border-gray-200 shadow-sm flex items-center gap-1">
-                                카카오맵 <ExternalLink size={12} />
-                            </button>
-                        </div>
+                    </div>
+
+                    <div className="flex gap-2 mb-3">
+                        <button className="px-3 py-1.5 bg-white rounded-full text-xs font-medium border border-gray-200 shadow-sm flex items-center gap-1">
+                            네이버 지도 <ExternalLink size={12} />
+                        </button>
+                        <button className="px-3 py-1.5 bg-white rounded-full text-xs font-medium border border-gray-200 shadow-sm flex items-center gap-1">
+                            카카오맵 <ExternalLink size={12} />
+                        </button>
                     </div>
 
                     <div className="space-y-2">
@@ -173,10 +174,10 @@ export default function App() {
                                     평일 진료
                                 </p>
                                 <p className="text-lg font-bold">
-                                    09:30 - 19:00
+                                    09:00 - 18:30
                                 </p>
                                 <p className="text-sm text-brand-muted mt-1">
-                                    (점심시간 13:00 - 14:00)
+                                    (점심시간 12:30 - 13:50)
                                 </p>
                             </div>
                         </div>
@@ -190,7 +191,7 @@ export default function App() {
                                     토요일 진료
                                 </p>
                                 <p className="text-lg font-bold">
-                                    09:30 - 14:00
+                                    09:00 - 12:30
                                 </p>
                                 <p className="text-sm text-brand-muted mt-1">
                                     (점심시간 없이 진료)
@@ -217,13 +218,6 @@ export default function App() {
                                 ※
                             </span>
                             접수 마감은 진료 종료 30분 전입니다.
-                        </p>
-                        <p className="text-sm text-brand-muted flex items-start gap-2">
-                            <span className="text-brand-green font-bold">
-                                ※
-                            </span>
-                            매월 마지막 주 수요일은 토요일과 동일하게
-                            진료합니다.
                         </p>
                         <p className="text-sm text-brand-muted flex items-start gap-2">
                             <span className="text-brand-green font-bold">
