@@ -103,7 +103,7 @@ export default function App() {
         {/* Hero Section */}
         <section id="intro" className="w-full bg-white">
           <img 
-            src="https://storage.googleapis.com/generativeai-downloads/images/s_48332060_0.png" 
+            src="file:///Users/ljiun/Downloads/Gemini_Generated_Image_4nqa404nqa404nqa.png" 
             alt="송현한의원"
             className="w-full h-auto block"
             referrerPolicy="no-referrer"
