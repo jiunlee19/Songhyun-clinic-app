@@ -288,7 +288,7 @@ export default function App() {
                                 네이버 지도 <ExternalLink size={12} />
                             </a>
                             <a
-                                href="https://kko.to/tmEJtK8g_y"
+                                href="https://place.map.kakao.com/9205359"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="px-3 py-1.5 bg-white rounded-full text-xs font-medium border border-gray-200 shadow-sm flex items-center gap-1 hover:bg-gray-50 transition-colors"
