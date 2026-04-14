@@ -124,19 +124,18 @@ export default function App() {
                     id="location"
                     className="section-margin py-16 bg-brand-bg"
                 >
-                    <div className="flex justify-between items-end mb-3">
+                    <div className="flex flex-wrap justify-between items-end mb-3 gap-3">
                         <h3 className="font-serif text-2xl font-bold">
                             찾아오시는 길
                         </h3>
-                    </div>
-
-                    <div className="flex gap-2 mb-3">
-                        <button className="px-3 py-1.5 bg-white rounded-full text-xs font-medium border border-gray-200 shadow-sm flex items-center gap-1">
-                            네이버 지도 <ExternalLink size={12} />
-                        </button>
-                        <button className="px-3 py-1.5 bg-white rounded-full text-xs font-medium border border-gray-200 shadow-sm flex items-center gap-1">
-                            카카오맵 <ExternalLink size={12} />
-                        </button>
+                        <div className="flex gap-2 mb-3">
+                            <button className="px-3 py-1.5 bg-white rounded-full text-xs font-medium border border-gray-200 shadow-sm flex items-center gap-1">
+                                네이버 지도 <ExternalLink size={12} />
+                            </button>
+                            <button className="px-3 py-1.5 bg-white rounded-full text-xs font-medium border border-gray-200 shadow-sm flex items-center gap-1">
+                                카카오맵 <ExternalLink size={12} />
+                            </button>
+                        </div>
                     </div>
 
                     <div className="space-y-2">
@@ -149,11 +148,11 @@ export default function App() {
 
                 {/* Operating Hours Section */}
                 <section id="hours" className="section-margin py-16 bg-white">
-                    <div className="flex items-center gap-2 mb-8">
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-5">
                         <h3 className="font-serif text-2xl font-bold">
                             언제나 편하게 내원하세요
                         </h3>
-                        <span className="flex items-center gap-1.5 text-xs font-bold text-brand-green bg-brand-green/10 px-2 py-1 rounded-full">
+                        <span className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-green bg-brand-green/10 px-2 py-1 rounded-full">
                             <div className="w-1.5 h-1.5 rounded-full bg-brand-green animate-pulse" />
                             현재 진료중
                         </span>
