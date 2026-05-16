@@ -3,7 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+
+// Kakao Maps 타입 선언
+declare global {
+    interface Window {
+        kakao: any;
+    }
+}
 import { motion, AnimatePresence } from "motion/react";
 import {
     Activity,
@@ -77,6 +84,47 @@ export default function App() {
         };
     }, []);
 
+    // Kakao 지도 초기화
+    const mapRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (!mapRef.current || !window.kakao) return;
+
+        window.kakao.maps.load(() => {
+            const { kakao } = window;
+
+            // WCONGNAMUL 좌표를 LatLng로 변환
+            const wcongCoord = new kakao.maps.Coords(880217, 855851);
+            const latLng = wcongCoord.toLatLng();
+
+            const mapOption = {
+                center: latLng,
+                level: 3,
+            };
+
+            const map = new kakao.maps.Map(mapRef.current, mapOption);
+
+            // 마커 생성
+            const marker = new kakao.maps.Marker({
+                position: latLng,
+            });
+            marker.setMap(map);
+
+            // 인포윈도우 생성
+            const iwContent = `
+                <div style="padding:8px 12px; font-size:13px; white-space:nowrap;">
+                    <strong>송현한의원</strong><br/>
+                    <a href="https://map.kakao.com/link/to/송현한의원,${latLng.getLat()},${latLng.getLng()}"
+                       style="color:#2D4A3E; text-decoration:underline;"
+                       target="_blank">길찾기</a>
+                </div>
+            `;
+            const infowindow = new kakao.maps.InfoWindow({
+                content: iwContent,
+            });
+            infowindow.open(map, marker);
+        });
+    }, []);
+
     return (
         <div className="min-h-screen flex flex-col">
             {/* Header */}
@@ -119,7 +167,7 @@ export default function App() {
                 {/* Hero Section */}
                 <section id="intro" className="w-full bg-white">
                     <img
-                        src="./banner.png"
+                        src="./banner.jpg"
                         alt="송현한의원"
                         className="w-full h-auto block"
                         referrerPolicy="no-referrer"
@@ -297,6 +345,12 @@ export default function App() {
                             </a>
                         </div>
                     </div>
+
+                    {/* 카카오 지도 */}
+                    <div
+                        ref={mapRef}
+                        className="w-full h-[280px] rounded-2xl overflow-hidden border border-gray-200 shadow-sm mb-6"
+                    />
 
                     <div className="space-y-2">
                         <p className="text-xl font-bold">옥동 경북대로 432</p>
